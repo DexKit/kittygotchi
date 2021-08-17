@@ -1,6 +1,5 @@
 import "@nomiclabs/hardhat-waffle";
 import "@nomiclabs/hardhat-ethers";
-import "hardhat-gas-reporter"
 
 import * as dotenv from 'dotenv';
 

@@ -5,8 +5,10 @@ Our mascote for our dashboard, each user with 10 KIT in their wallet is able to 
 You can feed, fight with other players and change his appearance on our dashboard.
 
 
-
-
-
 This opens the world of gamification of DexKit Dashboard where you can perform swaps, cross chain trades, place limit orders, check your favorite coins and deploy your own tools.
+
+# TODO
+
+[] KittyGotchi Logic
+[] Tests
 
