@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: MIT
+//SPDX-License-Identifier: Unlicense
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
@@ -35,6 +35,10 @@ contract Kittygotchi is ERC721, ERC721URIStorage {
 
     function _baseURI() internal pure override returns (string memory) {
         return "https://kittygotchi.dexkit.com";
+    }
+
+    function contractURI() public view returns (string memory) { 
+        return "https://kittygotchi.dexkit.com/info";
     }
 
     function _burn(uint256 tokenId) internal override(ERC721, ERC721URIStorage) {

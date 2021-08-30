@@ -1,4 +1,9 @@
+# Work in Progress
+
+
 # KITTYGOTCHI
+
+![image](assets/kittygotchi.png)
 
 Our mascote for our dashboard, each user with 10 KIT in their wallet is able to claim a base Kitty for him.
 
@@ -9,6 +14,7 @@ This opens the world of gamification of DexKit Dashboard where you can perform s
 
 # TODO
 
-[] KittyGotchi Logic
-[] Tests
+- [ ] KittyGotchi Logic
+
+- [ ] Tests
 
