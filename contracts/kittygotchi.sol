@@ -8,7 +8,7 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 
 contract Kittygotchi is ERC721, ERC721URIStorage {
     using Counters for Counters.Counter;
-
+    uint256 constant MAX_SUPPLY = 100000;
     Counters.Counter private _tokenIdCounter;
     address constant DEXKIT = 0x7866E48C74CbFB8183cd1a929cd9b95a7a5CB4F4;
     mapping(address => bool) claims;
@@ -28,6 +28,7 @@ contract Kittygotchi is ERC721, ERC721URIStorage {
     function safeMint() public {
         require(IERC20(DEXKIT).balanceOf(msg.sender) >= HOLDING_AMOUNT, "You need 10 KIT to claim");
         require(claims[msg.sender] == false, "Kitty already claimed" );
+         require(_tokenIdCounter.current() > MAX_SUPPLY, "Max Supply reached" );
         claims[msg.sender] = true;
         _safeMint(msg.sender, _tokenIdCounter.current());
         _tokenIdCounter.increment();       
