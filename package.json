@@ -6,7 +6,8 @@
   "author": "JoaoCampos89 <info@dexkit.com>",
   "scripts": {
     "test": "npx hardhat  test",
-    "compile": "npx hardhat  compile"
+    "compile": "npx hardhat  compile",
+    "deploy:mumbai": "npx hardhat run scripts/deploy-kittygotchi.ts --network mumbai"
   },
   "devDependencies": {
     "@chainlink/contracts": "^0.2.1",

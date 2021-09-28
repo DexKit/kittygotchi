@@ -7,7 +7,7 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 
-const { ALCHEMY_API } = process.env;
+const { ALCHEMY_API, PRIVATE_KEY } = process.env;
 // You need to export an object to set up your config
 // Go to https://hardhat.org/config/ to learn more
 
@@ -32,7 +32,17 @@ const { ALCHEMY_API } = process.env;
         url: `https://eth-mainnet.alchemyapi.io/v2/${ALCHEMY_API}`,
         blockNumber: 12956195
       }
-    }
+    },
+    mumbai: {
+      url: "https://rpc-mumbai.maticvigil.com",
+      gasPrice: 8000000000,
+      accounts: [PRIVATE_KEY],
+    },
+    polygon: {
+      url: `https://polygon-rpc.com/`,
+      accounts: [PRIVATE_KEY],
+      gasPrice: 8000000000,
+    },
   },
   gasReporter: {
     enabled: true

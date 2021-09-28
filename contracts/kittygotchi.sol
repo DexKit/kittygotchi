@@ -2,57 +2,41 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract Kittygotchi is ERC721, ERC721URIStorage {
+contract Kittygotchi is ERC721, Ownable {
     using Counters for Counters.Counter;
     uint256 constant MAX_SUPPLY = 100000;
+    uint256 constant PRICE = 10 ether;
     Counters.Counter private _tokenIdCounter;
-    address constant DEXKIT = 0x7866E48C74CbFB8183cd1a929cd9b95a7a5CB4F4;
-    mapping(address => bool) claims;
+    // DexKit on Polygon
+    address constant DEXKIT = 0x4d0def42cf57d6f27cd4983042a55dce1c9f853c;
     // Properties used for games
     mapping(uint256 => uint256) private _attack;
     mapping(uint256 => uint256) private _defense;
     mapping(uint256 => uint256) private _run;
     mapping(uint256 => uint256) private _lastUpdate;
 
-    // User needs to hold minimum 10 KIT to be able to mint a Kitty
-    uint256 constant HOLDING_AMOUNT = 10*(10**18);
     // If user holds 100 KIT, the feed will return double of points
     uint256 constant POWER_HOLDING_AMOUNT = 100*(10**18);
                                   
     constructor() ERC721("Kittygotchi", "Kitty") {}
 
-    function safeMint() public {
-        require(IERC20(DEXKIT).balanceOf(msg.sender) >= HOLDING_AMOUNT, "You need 10 KIT to claim");
-        require(claims[msg.sender] == false, "Kitty already claimed" );
-         require(_tokenIdCounter.current() > MAX_SUPPLY, "Max Supply reached" );
-        claims[msg.sender] = true;
+    function safeMint() public payable {
+        require(msg.sender == PRICE, "Sent exact price");
+        require(_tokenIdCounter.current() > MAX_SUPPLY, "Max Supply reached" );
         _safeMint(msg.sender, _tokenIdCounter.current());
         _tokenIdCounter.increment();       
     }
 
     function _baseURI() internal pure override returns (string memory) {
-        return "https://kittygotchi.dexkit.com";
+        return "https://kittygotchi.dexkit.com/api";
     }
 
     function contractURI() public view returns (string memory) { 
         return "https://kittygotchi.dexkit.com/info";
-    }
-
-    function _burn(uint256 tokenId) internal override(ERC721, ERC721URIStorage) {
-        super._burn(tokenId);
-    }
-
-    function tokenURI(uint256 tokenId)
-        public
-        view
-        override(ERC721, ERC721URIStorage)
-        returns (string memory)
-    {
-        return super.tokenURI(tokenId);
     }
 
     function feed(uint256 tokenId) external {
@@ -67,8 +51,7 @@ contract Kittygotchi is ERC721, ERC721URIStorage {
               _attack[tokenId] = _attack[tokenId] + _random(tokenId * 10 ) % 5;
               _defense[tokenId] = _defense[tokenId] + _random(tokenId * 30) % 5;
               _run[tokenId] = _run[tokenId] + _random(tokenId * 50) % 5;
-        }
-    
+        } 
     }
     /**
     *
@@ -111,15 +94,24 @@ contract Kittygotchi is ERC721, ERC721URIStorage {
 
     /**
     *
-    * If Cat is tired return half of Defense
+    * Cat last update
     *
      */
     function getLastUpdateOf(uint256 tokenId) external view returns (uint256){
        return _lastUpdate[tokenId];
     }
+
     // We generate a pseudo random number, just for fun
     function _random(uint256 tokenId) private view returns (uint) {   
         return uint(keccak256(abi.encodePacked(block.difficulty, block.timestamp, tokenId)));   
+    }
+
+    
+    function withdrawETH() external payable onlyOwner(){
+       (bool sent, ) = owner().call{
+            value: address(this).balance
+        }("");
+        require(sent, "Failed to send Ether");
     }
 
 

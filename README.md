@@ -18,3 +18,8 @@ This opens the world of gamification of DexKit Dashboard where you can perform s
 
 - [ ] Tests
 
+# CoinsLeagueChampions
+
+# References
+
+[https://docs.chain.link/docs/vrf-contracts/](Chainlink VRF)
