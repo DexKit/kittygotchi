@@ -12,7 +12,7 @@ contract Kittygotchi is ERC721, Ownable {
     uint256 constant PRICE = 10 ether;
     Counters.Counter private _tokenIdCounter;
     // DexKit on Polygon
-    address constant DEXKIT = 0x4d0def42cf57d6f27cd4983042a55dce1c9f853c;
+    address constant DEXKIT = 0x4D0Def42Cf57D6f27CD4983042a55dce1C9F853c;
     // Properties used for games
     mapping(uint256 => uint256) private _attack;
     mapping(uint256 => uint256) private _defense;
@@ -25,7 +25,7 @@ contract Kittygotchi is ERC721, Ownable {
     constructor() ERC721("Kittygotchi", "Kitty") {}
 
     function safeMint() public payable {
-        require(msg.sender == PRICE, "Sent exact price");
+        require(msg.value == PRICE, "Sent exact price");
         require(_tokenIdCounter.current() > MAX_SUPPLY, "Max Supply reached" );
         _safeMint(msg.sender, _tokenIdCounter.current());
         _tokenIdCounter.increment();       
