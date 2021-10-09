@@ -7,7 +7,8 @@
   "scripts": {
     "test": "npx hardhat  test",
     "compile": "npx hardhat  compile",
-    "deploy:mumbai": "npx hardhat run scripts/deploy-kittygotchi.ts --network mumbai"
+    "deploy:mumbai": "npx hardhat run scripts/deploy-kittygotchi-mumbai.ts --network mumbai",
+    "deploy:polygon": "npx hardhat run scripts/deploy-kittygotchi.ts --network polygon"
   },
   "devDependencies": {
     "@chainlink/contracts": "^0.2.1",
@@ -24,6 +25,6 @@
     "typescript": "^4.3.5"
   },
   "dependencies": {
-    "@openzeppelin/contracts": "^4.2.0"
+    "@openzeppelin/contracts": "^4.3.2"
   }
 }

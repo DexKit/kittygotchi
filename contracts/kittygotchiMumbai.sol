@@ -6,13 +6,13 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract Kittygotchi is ERC721, Ownable {
+contract KittygotchiMumbai is ERC721, Ownable {
     using Counters for Counters.Counter;
     uint256 constant MAX_SUPPLY = 100000;
-    uint256 constant PRICE = 10 ether;
+    uint256 constant PRICE = 100;
     Counters.Counter private _tokenIdCounter;
-    // DexKit on Polygon
-    address constant DEXKIT = 0x4D0Def42Cf57D6f27CD4983042a55dce1C9F853c;
+    // DexKit on Mumbai
+    address constant DEXKIT = 0xdf2e4383363609351637d262f6963D385b387340;
     // Properties used for games
     mapping(uint256 => uint256) private _attack;
     mapping(uint256 => uint256) private _defense;
@@ -32,11 +32,11 @@ contract Kittygotchi is ERC721, Ownable {
     }
 
     function _baseURI() internal pure override returns (string memory) {
-        return "https://kittygotchi.dexkit.com/api";
+        return "https://mumbai.kittygotchi.dexkit.com/api";
     }
 
     function contractURI() public view returns (string memory) { 
-        return "https://kittygotchi.dexkit.com/info";
+        return "https://mumbai.kittygotchi.dexkit.com/info";
     }
 
     function feed(uint256 tokenId) external {
