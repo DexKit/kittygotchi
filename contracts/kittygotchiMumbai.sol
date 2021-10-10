@@ -26,17 +26,17 @@ contract KittygotchiMumbai is ERC721, Ownable {
 
     function safeMint() public payable {
         require(msg.value == PRICE, "Sent exact price");
-        require(_tokenIdCounter.current() > MAX_SUPPLY, "Max Supply reached" );
+        require(_tokenIdCounter.current() < MAX_SUPPLY, "Max Supply reached" );
         _safeMint(msg.sender, _tokenIdCounter.current());
         _tokenIdCounter.increment();       
     }
 
     function _baseURI() internal pure override returns (string memory) {
-        return "https://mumbai.kittygotchi.dexkit.com/api";
+        return "https://mumbai-kittygotchi.dexkit.com/api";
     }
 
     function contractURI() public view returns (string memory) { 
-        return "https://mumbai.kittygotchi.dexkit.com/info";
+        return "https://mumbai-kittygotchi.dexkit.com/info";
     }
 
     function feed(uint256 tokenId) external {
