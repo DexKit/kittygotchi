@@ -8,6 +8,7 @@
     "test": "npx hardhat  test",
     "compile": "npx hardhat  compile",
     "deploy:mumbai": "npx hardhat run scripts/deploy-kittygotchi-mumbai.ts --network mumbai",
+    "claim:mumbai": "npx hardhat run scripts/claim-amount-mumbai.ts --network mumbai",
     "deploy:polygon": "npx hardhat run scripts/deploy-kittygotchi.ts --network polygon"
   },
   "devDependencies": {

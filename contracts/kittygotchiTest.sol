@@ -6,16 +6,16 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract Kittygotchi is ERC721, Ownable {
+contract KittygotchiTest is ERC721, Ownable {
     using Counters for Counters.Counter;
 
     event GotchiFeeded(uint256 id, uint256 at);
-
+    
     uint256 constant MAX_SUPPLY = 100000;
-    uint256 constant PRICE = 10 ether;
+    uint256 constant PRICE = 100;
     Counters.Counter private _tokenIdCounter;
-    // DexKit on Polygon
-    address constant DEXKIT = 0x4D0Def42Cf57D6f27CD4983042a55dce1C9F853c;
+    // DexKit on Mumbai
+    address constant DEXKIT = 0xdf2e4383363609351637d262f6963D385b387340;
     // Properties used for games
     mapping(uint256 => uint256) private _attack;
     mapping(uint256 => uint256) private _defense;
@@ -35,26 +35,22 @@ contract Kittygotchi is ERC721, Ownable {
     }
 
     function _baseURI() internal pure override returns (string memory) {
-        return "https://kittygotchi.dexkit.com/api/";
+        return "https://mumbai-kittygotchi.dexkit.com/api/";
     }
 
-    function contractURI() public pure returns (string memory) { 
-        return "https://kittygotchi.dexkit.com/info";
+    function contractURI() public view returns (string memory) { 
+        return "https://mumbai-kittygotchi.dexkit.com/info";
     }
 
     function feed(uint256 tokenId) external {
         require(block.timestamp >= _lastUpdate[tokenId] + 24 hours, "You can not feed yet");
         _lastUpdate[tokenId] = block.timestamp;
         require(ownerOf(tokenId) == msg.sender, "Only owner can feed");
-        if(IERC20(DEXKIT).balanceOf(msg.sender) >= POWER_HOLDING_AMOUNT){
-              _attack[tokenId] = _attack[tokenId] + 2 * (_random((tokenId+1) * 10) % 5);
-              _defense[tokenId] = _defense[tokenId] + 2 * (_random((tokenId+1) * 30) % 5);
-              _run[tokenId] = _run[tokenId] + 2 * (_random((tokenId+1) * 50) % 5);
-        }else{
-              _attack[tokenId] = _attack[tokenId] + _random((tokenId+1) * 10 ) % 5;
-              _defense[tokenId] = _defense[tokenId] + _random((tokenId+1) * 30) % 5;
-              _run[tokenId] = _run[tokenId] + _random((tokenId+1) * 50) % 5;
-        } 
+      
+        _attack[tokenId] = _attack[tokenId] + _random((tokenId +1) * 10  ) % 5;
+        _defense[tokenId] = _defense[tokenId] + _random((tokenId +1) * 30 )  % 5;
+        _run[tokenId] = _run[tokenId] + _random((tokenId + 1) * 50) % 5;
+
         emit GotchiFeeded(tokenId, block.timestamp); 
     }
     /**
@@ -63,7 +59,7 @@ contract Kittygotchi is ERC721, Ownable {
     *
     */
     function getAttackOf(uint256 tokenId) external view  returns (uint256){
-        if(block.timestamp > _lastUpdate[tokenId] + 36 hours ){
+        if(block.timestamp > _lastUpdate[tokenId] + 26 hours ){
             return _attack[tokenId]/2;
         }else{
             return _attack[tokenId];
@@ -71,12 +67,12 @@ contract Kittygotchi is ERC721, Ownable {
     }
 
     /**
-    *
-    * If Cat is tired return half of Run
-    *
+     *
+     * If Cat is tired return half of Run
+     *
      */
     function getRunOf(uint256 tokenId) external view returns (uint256){
-        if(block.timestamp > _lastUpdate[tokenId] + 36 hours ){
+        if(block.timestamp > _lastUpdate[tokenId] + 26 hours ){
             return _run[tokenId]/2;
         }else{
             return _run[tokenId];
@@ -89,7 +85,7 @@ contract Kittygotchi is ERC721, Ownable {
     *
      */
     function getDefenseOf(uint256 tokenId) external view returns (uint256){
-        if(block.timestamp > _lastUpdate[tokenId] + 36 hours ){
+        if(block.timestamp > _lastUpdate[tokenId] + 26 hours ){
             return _defense[tokenId]/2;
         }else{
             return _defense[tokenId];
@@ -106,12 +102,26 @@ contract Kittygotchi is ERC721, Ownable {
     }
 
     // We generate a pseudo random number, just for fun
-    function _random(uint256 tokenId) private view returns (uint) {   
+    function _random(uint256 tokenId) public view returns (uint) {   
         return uint(keccak256(abi.encodePacked(block.difficulty, block.timestamp, tokenId)));   
     }
 
+    // We generate a pseudo random number, just for fun
+    function randomRun(uint256 tokenId) public view returns (uint) {   
+        return  _random((tokenId + 1) * 5000) % 5;
+    }
+
+    // We generate a pseudo random number, just for fun
+    function randomAttack(uint256 tokenId) public view returns (uint) {   
+        return  _random((tokenId+1) * 10) % 5;
+    }
+     // We generate a pseudo random number, just for fun
+    function randomDefense(uint256 tokenId) public view returns (uint) {   
+        return  _random((tokenId +1) * 300) % 5;
+    }
+
     
-    function withdrawETH() external payable onlyOwner{
+    function withdrawETH() external payable onlyOwner(){
        (bool sent, ) = owner().call{
             value: address(this).balance
         }("");

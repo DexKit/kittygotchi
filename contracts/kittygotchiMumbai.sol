@@ -8,6 +8,9 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract KittygotchiMumbai is ERC721, Ownable {
     using Counters for Counters.Counter;
+
+    event GotchiFeeded(uint256 id, uint256 at);
+    
     uint256 constant MAX_SUPPLY = 100000;
     uint256 constant PRICE = 100;
     Counters.Counter private _tokenIdCounter;
@@ -32,7 +35,7 @@ contract KittygotchiMumbai is ERC721, Ownable {
     }
 
     function _baseURI() internal pure override returns (string memory) {
-        return "https://mumbai-kittygotchi.dexkit.com/api";
+        return "https://mumbai-kittygotchi.dexkit.com/api/";
     }
 
     function contractURI() public view returns (string memory) { 
@@ -44,14 +47,15 @@ contract KittygotchiMumbai is ERC721, Ownable {
         _lastUpdate[tokenId] = block.timestamp;
         require(ownerOf(tokenId) == msg.sender, "Only owner can feed");
         if(IERC20(DEXKIT).balanceOf(msg.sender) >= POWER_HOLDING_AMOUNT){
-              _attack[tokenId] = _attack[tokenId] + 2 * (_random(tokenId * 10) % 5);
-              _defense[tokenId] = _defense[tokenId] + 2 * (_random(tokenId* 30) % 5);
-              _run[tokenId] = _run[tokenId] + 2 * (_random(tokenId * 50) % 5);
+              _attack[tokenId] = _attack[tokenId] + 2 * (_random((tokenId + 1) * 10) % 5);
+              _defense[tokenId] = _defense[tokenId] + 2 * (_random( (tokenId + 1) * 30) % 5);
+              _run[tokenId] = _run[tokenId] + 2 * (_random( (tokenId + 1) * 50) % 5);
         }else{
-              _attack[tokenId] = _attack[tokenId] + _random(tokenId * 10 ) % 5;
-              _defense[tokenId] = _defense[tokenId] + _random(tokenId * 30) % 5;
-              _run[tokenId] = _run[tokenId] + _random(tokenId * 50) % 5;
-        } 
+              _attack[tokenId] = _attack[tokenId] + _random((tokenId + 1) * 10 ) % 5;
+              _defense[tokenId] = _defense[tokenId] + _random((tokenId + 1) * 30) % 5;
+              _run[tokenId] = _run[tokenId] + _random((tokenId + 1) * 50) % 5;
+        }
+        emit GotchiFeeded(tokenId, block.timestamp); 
     }
     /**
     *
@@ -59,7 +63,7 @@ contract KittygotchiMumbai is ERC721, Ownable {
     *
     */
     function getAttackOf(uint256 tokenId) external view  returns (uint256){
-        if(block.timestamp > _lastUpdate[tokenId] + 24 hours ){
+        if(block.timestamp > _lastUpdate[tokenId] + 32 hours ){
             return _attack[tokenId]/2;
         }else{
             return _attack[tokenId];
@@ -67,12 +71,12 @@ contract KittygotchiMumbai is ERC721, Ownable {
     }
 
     /**
-    *
-    * If Cat is tired return half of Run
-    *
+     *
+     * If Cat is tired return half of Run
+     *
      */
     function getRunOf(uint256 tokenId) external view returns (uint256){
-        if(block.timestamp > _lastUpdate[tokenId] + 24 hours ){
+        if(block.timestamp > _lastUpdate[tokenId] + 32 hours ){
             return _run[tokenId]/2;
         }else{
             return _run[tokenId];
@@ -85,7 +89,7 @@ contract KittygotchiMumbai is ERC721, Ownable {
     *
      */
     function getDefenseOf(uint256 tokenId) external view returns (uint256){
-        if(block.timestamp > _lastUpdate[tokenId] + 24 hours ){
+        if(block.timestamp > _lastUpdate[tokenId] + 32 hours ){
             return _defense[tokenId]/2;
         }else{
             return _defense[tokenId];
@@ -107,7 +111,7 @@ contract KittygotchiMumbai is ERC721, Ownable {
     }
 
     
-    function withdrawETH() external payable onlyOwner(){
+    function withdrawETH() external payable onlyOwner{
        (bool sent, ) = owner().call{
             value: address(this).balance
         }("");
