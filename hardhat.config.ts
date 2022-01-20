@@ -44,6 +44,10 @@ const { ALCHEMY_API, PRIVATE_KEY } = process.env;
       accounts: [PRIVATE_KEY],
       gasPrice: 8000000000,
     },
+    bsc: {
+      url: `https://bsc-dataseed.binance.org/`,
+      accounts: [PRIVATE_KEY],
+    },
   },
   gasReporter: {
     enabled: true
