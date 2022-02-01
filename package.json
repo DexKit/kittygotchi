@@ -10,6 +10,7 @@
     "deploy:mumbai": "npx hardhat run scripts/deploy-kittygotchi-mumbai.ts --network mumbai",
     "claim:mumbai": "npx hardhat run scripts/claim-amount-mumbai.ts --network mumbai",
     "claim:matic": "npx hardhat run scripts/claim-amount-matic.ts --network matic",
+    "claim:bsc": "npx hardhat run scripts/claim-amount-bsc.ts --network bsc",
     "deploy:polygon": "npx hardhat run scripts/deploy-kittygotchi.ts --network polygon",
     "deploy:bsc": "npx hardhat run scripts/deploy-kittygotchi-bsc.ts --network bsc"
   },

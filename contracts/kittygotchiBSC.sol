@@ -35,7 +35,7 @@ contract KittygotchiBSC is ERC721, Ownable {
     }
 
     function _baseURI() internal pure override returns (string memory) {
-        return "https://kittygotchi.dexkit.com/api/bsc";
+        return "https://kittygotchi.dexkit.com/api/bsc/";
     }
 
     function contractURI() public pure returns (string memory) { 

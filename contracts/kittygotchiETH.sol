@@ -35,7 +35,7 @@ contract KittygotchiETH is ERC721, Ownable {
     }
 
     function _baseURI() internal pure override returns (string memory) {
-        return "https://kittygotchi.dexkit.com/api/eth";
+        return "https://kittygotchi.dexkit.com/api/eth/";
     }
 
     function contractURI() public pure returns (string memory) { 
